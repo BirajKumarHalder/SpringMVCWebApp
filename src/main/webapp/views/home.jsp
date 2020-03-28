@@ -13,7 +13,6 @@
 	<div class="container mt-2">
 		<%
 			com.tutorials.models.User user = (com.tutorials.models.User) session.getAttribute("loggedInUser");
-			pageContext.setAttribute("userRole", "pagecontextuser");
 			if (user.getUserRole().equals("Admin")) {
 		%>
 		<div class="alert alert-success rounded-0" role="alert">
@@ -34,7 +33,7 @@
 			<div class="card-body">
 				<h5 class="card-title">
 					You have logged in this page as
-					<%=pageContext.getAttribute("userRole")%></h5>
+					<%=user.getUserRole()%></h5>
 				<p>
 					<a href="retrieveUserDetails?&userId=<%=user.getUserId()%>">View
 						Details</a>
