@@ -1,8 +1,8 @@
 package com.tutorials.services;
 
 import com.tutorials.models.User;
-import com.tutorials.reposetories.AuthRepo;
-import com.tutorials.reposetories.UserRepo;
+import com.tutorials.repositories.AuthRepo;
+import com.tutorials.repositories.UserRepo;
 
 public class UserService {
 

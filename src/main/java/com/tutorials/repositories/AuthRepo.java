@@ -1,4 +1,4 @@
-package com.tutorials.reposetories;
+package com.tutorials.repositories;
 
 import java.util.HashMap;
 import java.util.Map;
