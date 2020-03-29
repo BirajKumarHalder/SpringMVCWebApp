@@ -20,8 +20,7 @@
 					</div>
 				</c:if>
 				<h5 class="card-title">Provide credentials</h5>
-				<form:form action="/SpringMVCWebApp/login.htm" method="post"
-					modelAttribute="loginForm">
+				<form:form action="login" method="post" modelAttribute="loginForm">
 					<div class="form-group">
 						<label for="userId">User Id</label>
 						<form:input type="text" class="form-control" id="userId"

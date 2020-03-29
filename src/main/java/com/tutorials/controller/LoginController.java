@@ -1,11 +1,15 @@
 package com.tutorials.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.tutorials.exceptions.AuthenticationException;
 import com.tutorials.models.LoginRq;
 import com.tutorials.models.User;
 import com.tutorials.services.UserService;
@@ -13,21 +17,43 @@ import com.tutorials.services.UserService;
 @Controller
 public class LoginController extends BaseController {
 
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public ModelAndView baseHandler() {
+		return new ModelAndView("login", "loginForm", new LoginRq());
+	}
+
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView loginGetHandler() {
 		return new ModelAndView("login", "loginForm", new LoginRq());
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public ModelAndView loginPostHandler(@ModelAttribute("loginForm") LoginRq loginRq) {
+	public ModelAndView loginPostHandler(@ModelAttribute("loginForm") LoginRq loginRq, HttpServletRequest request)
+			throws AuthenticationException {
 		UserService userService = (UserService) context.getBean("userService");
 		ModelAndView modelAndView = null;
 		if (userService.validateCredentials(loginRq.getUserId(), loginRq.getPassword())) {
 			User user = userService.retrieveUserDetails(loginRq.getUserId());
+			request.getSession().setAttribute("loggedInUser", user);
 			modelAndView = new ModelAndView("home", "user", user);
 		} else {
-			modelAndView = new ModelAndView("login", "error", "Invalid credentials!");
+			throw new AuthenticationException("Invalid credentials!");
 		}
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	public ModelAndView logoutGetHandler(HttpServletRequest request) {
+		request.getSession().invalidate();
+		return new ModelAndView("login", "loginForm", new LoginRq());
+	}
+
+	@ExceptionHandler(AuthenticationException.class)
+	public ModelAndView handleAuthenticationException(HttpServletRequest request, Exception e) {
+		System.out.println("Auth Exception");
+		ModelAndView modelAndView = new ModelAndView("login");
+		modelAndView.addObject("error", ((AuthenticationException) e).getErrorMessage());
+		modelAndView.addObject("loginForm", new LoginRq());
 		return modelAndView;
 	}
 

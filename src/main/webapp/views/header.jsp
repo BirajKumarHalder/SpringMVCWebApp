@@ -2,6 +2,6 @@
 <html>
 <body>
 	<nav class="navbar navbar-dark bg-dark"> <span
-		class="navbar-brand mb-0 h1">Java EE App with Servlet and JSP</span> </nav>
+		class="navbar-brand mb-0 h1">Java EE App with Spring</span> </nav>
 </body>
 </html>
