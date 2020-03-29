@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tutorials.exceptions.AuthenticationException;
+import com.tutorials.exceptions.UserNotFoundException;
 import com.tutorials.models.LoginRq;
 import com.tutorials.models.User;
 import com.tutorials.services.UserService;
@@ -29,11 +30,14 @@ public class LoginController extends BaseController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ModelAndView loginPostHandler(@ModelAttribute("loginForm") LoginRq loginRq, HttpServletRequest request)
-			throws AuthenticationException {
+			throws AuthenticationException, UserNotFoundException {
 		UserService userService = (UserService) context.getBean("userService");
 		ModelAndView modelAndView = null;
 		if (userService.validateCredentials(loginRq.getUserId(), loginRq.getPassword())) {
 			User user = userService.retrieveUserDetails(loginRq.getUserId());
+			if (user == null) {
+				throw new UserNotFoundException("No user found!");
+			}
 			request.getSession().setAttribute("loggedInUser", user);
 			modelAndView = new ModelAndView("home", "user", user);
 		} else {
@@ -49,10 +53,19 @@ public class LoginController extends BaseController {
 	}
 
 	@ExceptionHandler(AuthenticationException.class)
-	public ModelAndView handleAuthenticationException(HttpServletRequest request, Exception e) {
+	public ModelAndView handleAuthenticationException(AuthenticationException e) {
 		System.out.println("Auth Exception");
 		ModelAndView modelAndView = new ModelAndView("login");
-		modelAndView.addObject("error", ((AuthenticationException) e).getErrorMessage());
+		modelAndView.addObject("error", e.getErrorMessage());
+		modelAndView.addObject("loginForm", new LoginRq());
+		return modelAndView;
+	}
+
+	@ExceptionHandler(UserNotFoundException.class)
+	public ModelAndView handleUserNotFoundException(UserNotFoundException e) {
+		System.out.println("User Not Found Exception");
+		ModelAndView modelAndView = new ModelAndView("login");
+		modelAndView.addObject("error", e.getErrorMessage());
 		modelAndView.addObject("loginForm", new LoginRq());
 		return modelAndView;
 	}
