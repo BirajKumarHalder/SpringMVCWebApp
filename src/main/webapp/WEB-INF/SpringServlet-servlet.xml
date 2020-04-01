@@ -10,11 +10,16 @@
         http://www.springframework.org/schema/mvc/spring-mvc.xsd
         http://www.springframework.org/schema/context 
         http://www.springframework.org/schema/context/spring-context.xsd">
-
 	<context:annotation-config />
+	<mvc:annotation-driven />
+	<mvc:resources location="/css/" mapping="css/**"
+		cache-period="0" />
+	<mvc:resources location="/fonts/" mapping="fonts/**"
+		cache-period="0" />
+	<mvc:resources location="/js/" mapping="js/**"
+		cache-period="0" />
 	<context:component-scan
 		base-package="com.tutorials.controller" />
-
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass"
@@ -22,7 +27,22 @@
 		<property name="prefix" value="/views/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
-
 	<bean id="userService" class="com.tutorials.services.UserService"></bean>
-
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"></mvc:mapping>
+			<mvc:exclude-mapping path="/css/**"></mvc:exclude-mapping>
+			<mvc:exclude-mapping path="/js/**"></mvc:exclude-mapping>
+			<bean id="logInterceptor"
+				class="com.tutorials.interceptors.LogInterceptor"></bean>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"></mvc:mapping>
+			<mvc:exclude-mapping path="/login"></mvc:exclude-mapping>
+			<mvc:exclude-mapping path="/css/**"></mvc:exclude-mapping>
+			<mvc:exclude-mapping path="/js/**"></mvc:exclude-mapping>
+			<bean id="authenticationInterceptor"
+				class="com.tutorials.interceptors.AuthenticationInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
 </beans>

@@ -2,6 +2,8 @@ package com.tutorials.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -18,19 +20,24 @@ import com.tutorials.services.UserService;
 @Controller
 public class LoginController extends BaseController {
 
+	private static final Log LOGGER = LogFactory.getLog(LoginController.class);
+
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView baseHandler() {
+		LOGGER.info("LoginController : / : GET");
 		return new ModelAndView("login", "loginForm", new LoginRq());
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView loginGetHandler() {
+		LOGGER.info("LoginController : /login : GET");
 		return new ModelAndView("login", "loginForm", new LoginRq());
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ModelAndView loginPostHandler(@ModelAttribute("loginForm") LoginRq loginRq, HttpServletRequest request)
 			throws AuthenticationException, UserNotFoundException {
+		LOGGER.info("LoginController : /login : POST");
 		UserService userService = (UserService) context.getBean("userService");
 		ModelAndView modelAndView = null;
 		if (userService.validateCredentials(loginRq.getUserId(), loginRq.getPassword())) {
@@ -49,12 +56,13 @@ public class LoginController extends BaseController {
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public ModelAndView logoutGetHandler(HttpServletRequest request) {
 		request.getSession().invalidate();
+		LOGGER.info("Logging out");
 		return new ModelAndView("login", "loginForm", new LoginRq());
 	}
 
 	@ExceptionHandler(AuthenticationException.class)
 	public ModelAndView handleAuthenticationException(AuthenticationException e) {
-		System.out.println("Auth Exception");
+		LOGGER.info("Auth Exception");
 		ModelAndView modelAndView = new ModelAndView("login");
 		modelAndView.addObject("error", e.getErrorMessage());
 		modelAndView.addObject("loginForm", new LoginRq());
@@ -63,7 +71,7 @@ public class LoginController extends BaseController {
 
 	@ExceptionHandler(UserNotFoundException.class)
 	public ModelAndView handleUserNotFoundException(UserNotFoundException e) {
-		System.out.println("User Not Found Exception");
+		LOGGER.info("User Not Found Exception");
 		ModelAndView modelAndView = new ModelAndView("login");
 		modelAndView.addObject("error", e.getErrorMessage());
 		modelAndView.addObject("loginForm", new LoginRq());
