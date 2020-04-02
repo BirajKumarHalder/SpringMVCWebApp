@@ -6,14 +6,13 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 public class LogInterceptor implements HandlerInterceptor {
 
-	private static final Log LOGGER = LogFactory.getLog(LogInterceptor.class);
+	private static final Logger LOGGER = Logger.getLogger(LogInterceptor.class);
 
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
@@ -22,8 +21,8 @@ public class LogInterceptor implements HandlerInterceptor {
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss z");
 		String currentTime = sdf.format(date);
-		LOGGER.info("LogInterceptor: <Requested Uri: " + requestUri + ">< IP : " + ipAddress + "><Time : "
-				+ currentTime + ">");
+		LOGGER.info("LogInterceptor: <Requested Uri: " + requestUri + ">< IP : " + ipAddress + "><Time : " + currentTime
+				+ ">");
 		return true;
 	}
 

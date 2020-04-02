@@ -20,7 +20,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 		User user = (User) request.getSession().getAttribute("loggedInUser");
 		if (user == null) {
 			LOGGER.info("Authentication failed");
-			return false;
+			response.sendRedirect(request.getContextPath() + "/login");
 		}
 		LOGGER.info("Authentication success");
 		return true;

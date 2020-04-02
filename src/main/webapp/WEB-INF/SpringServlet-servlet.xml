@@ -19,7 +19,7 @@
 	<mvc:resources location="/js/" mapping="js/**"
 		cache-period="0" />
 	<context:component-scan
-		base-package="com.tutorials.controller" />
+		base-package="com.tutorials" />
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass"
