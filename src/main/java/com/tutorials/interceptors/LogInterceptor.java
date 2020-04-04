@@ -21,8 +21,8 @@ public class LogInterceptor implements HandlerInterceptor {
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss z");
 		String currentTime = sdf.format(date);
-		LOGGER.info("LogInterceptor: <Requested Uri: " + requestUri + ">< IP : " + ipAddress + "><Time : " + currentTime
-				+ ">");
+		LOGGER.info(
+				"Pre Handle: <Requested Uri: " + requestUri + ">< IP : " + ipAddress + "><Time : " + currentTime + ">");
 		return true;
 	}
 
@@ -31,7 +31,7 @@ public class LogInterceptor implements HandlerInterceptor {
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss z");
 		String currentTime = sdf.format(date);
-		LOGGER.info("LogInterceptor postHandle: <Time : " + currentTime + ">");
+		LOGGER.info("Post Handle: <Time : " + currentTime + ">");
 	}
 
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler,
@@ -39,7 +39,7 @@ public class LogInterceptor implements HandlerInterceptor {
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss z");
 		String currentTime = sdf.format(date);
-		LOGGER.info("LogInterceptor afterCompletion: <Time : " + currentTime + ">");
+		LOGGER.info("After Completion: <Time : " + currentTime + ">");
 	}
 
 }

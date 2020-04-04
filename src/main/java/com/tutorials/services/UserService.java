@@ -20,4 +20,5 @@ public class UserService {
 	public User retrieveUserDetails(String userId) {
 		return userRepo.retrieveUserDetails(userId);
 	}
+
 }

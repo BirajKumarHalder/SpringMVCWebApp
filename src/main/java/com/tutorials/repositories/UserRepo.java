@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class UserRepo {
+
 	private static Map<String, User> userDetails = new HashMap<String, User>();
 
 	static {
@@ -24,4 +25,5 @@ public class UserRepo {
 		}
 		return user;
 	}
+
 }

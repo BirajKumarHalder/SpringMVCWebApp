@@ -1,7 +1,6 @@
 package com.tutorials.controller;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,11 +15,11 @@ import com.tutorials.services.UserService;
 @Controller
 public class RetrieveUserDetailsController extends BaseController {
 
-	private static final Log LOGGER = LogFactory.getLog(RetrieveUserDetailsController.class);
+	private static final Logger LOGGER = Logger.getLogger(RetrieveUserDetailsController.class);
 
 	@RequestMapping(value = "retrieveUserDetails", method = RequestMethod.GET)
 	public ModelAndView retrieveUserDetailsGetHandler(@RequestParam() String userId) throws UserNotFoundException {
-		LOGGER.info("RetrieveUserDetailsController : /retrieveUserDetails : GET");
+		LOGGER.info("/retrieveUserDetails : GET");
 		UserService userService = (UserService) context.getBean("userService");
 		User user = userService.retrieveUserDetails(userId);
 		if (user == null) {
@@ -37,4 +36,5 @@ public class RetrieveUserDetailsController extends BaseController {
 		modelAndView.addObject("user", new User());
 		return modelAndView;
 	}
+
 }

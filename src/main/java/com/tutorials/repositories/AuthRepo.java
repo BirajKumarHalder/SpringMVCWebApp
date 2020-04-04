@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AuthRepo {
+
 	private static Map<String, String> authDetails = new HashMap<String, String>();
 
 	static {
@@ -18,4 +19,5 @@ public class AuthRepo {
 		}
 		return isValid;
 	}
+
 }

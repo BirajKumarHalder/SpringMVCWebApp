@@ -3,8 +3,7 @@ package com.tutorials.interceptors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -12,7 +11,7 @@ import com.tutorials.models.User;
 
 public class AuthenticationInterceptor implements HandlerInterceptor {
 
-	private static final Log LOGGER = LogFactory.getLog(AuthenticationInterceptor.class);
+	private static final Logger LOGGER = Logger.getLogger(AuthenticationInterceptor.class);
 
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
