@@ -1,23 +1,23 @@
 package com.tutorials.repositories;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
 public class AuthRepo {
 
-	private static Map<String, String> authDetails = new HashMap<String, String>();
-
-	static {
-		authDetails.put("Admin", "Admin");
-		authDetails.put("User", "User");
-	}
+	@Autowired
+	private DataSource dataSource;
 
 	public boolean validateCredentials(String userId, String password) {
-		boolean isValid = false;
-		if (userId != null && password != null && password.equals(authDetails.get(userId))) {
-			isValid = true;
-		}
-		return isValid;
+		String query = "select active from auth where userId = :userId and password = :password";
+		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+		SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("userId", userId).addValue("password",
+				password);
+		return namedParameterJdbcTemplate.queryForObject(query, namedParameters, Boolean.class);
 	}
 
 }

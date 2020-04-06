@@ -24,8 +24,12 @@
 		cache-period="0" />
 	<bean id="appProperties"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location"
-			value="classpath:application.properties" />
+		<property name="locations">
+			<list>
+				<value>classpath:application.properties</value>
+				<value>classpath:db.properties</value>
+			</list>
+		</property>
 	</bean>
 	<context:component-scan
 		base-package="com.tutorials" />
@@ -56,4 +60,11 @@
 				class="com.tutorials.interceptors.AuthenticationInterceptor"></bean>
 		</mvc:interceptor>
 	</mvc:interceptors>
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${mysql.dbDriver}" />
+		<property name="url" value="${mysql.connectionUrl}" />
+		<property name="username" value="${mysql.userName}" />
+		<property name="password" value="${mysql.password}" />
+	</bean>
 </beans>

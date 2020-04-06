@@ -1,29 +1,37 @@
 package com.tutorials.repositories;
 
-import com.tutorials.models.User;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+
+import com.tutorials.models.User;
 
 @Repository
 public class UserRepo {
 
-	private static Map<String, User> userDetails = new HashMap<String, User>();
-
-	static {
-		userDetails.put("Admin",
-				new User("Admin", "Jhon Doe Admin", "Admin", "john.doe.admin@email.com", "9876543210"));
-		userDetails.put("User", new User("User", "Jhon Doe User", "User", "john.doe.user@email.com", "9876543210"));
-	}
+	@Autowired
+	private DataSource dataSource;
 
 	public User retrieveUserDetails(String userId) {
-		User user = null;
-		if (userId != null) {
-			user = userDetails.get(userId);
-		}
-		return user;
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		String query = "select * from user where userId = ?";
+		return jdbcTemplate.queryForObject(query, new Object[] { userId }, new RowMapper<User>() {
+			public User mapRow(ResultSet result, int rowNum) throws SQLException {
+				User user = new User();
+				user.setUserId(result.getString("userId"));
+				user.setUserName(result.getString("userName"));
+				user.setUserRole(result.getString("userRole"));
+				user.setUserEmail(result.getString("userEmail"));
+				user.setUserContact(result.getString("userContact"));
+				return user;
+			}
+		});
 	}
 
 }
