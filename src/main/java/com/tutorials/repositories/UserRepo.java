@@ -20,15 +20,15 @@ public class UserRepo {
 
 	public User retrieveUserDetails(String userId) {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-		String query = "select * from user where userId = ?";
+		String query = "select * from user where user_id = ?";
 		return jdbcTemplate.queryForObject(query, new Object[] { userId }, new RowMapper<User>() {
 			public User mapRow(ResultSet result, int rowNum) throws SQLException {
 				User user = new User();
-				user.setUserId(result.getString("userId"));
-				user.setUserName(result.getString("userName"));
-				user.setUserRole(result.getString("userRole"));
-				user.setUserEmail(result.getString("userEmail"));
-				user.setUserContact(result.getString("userContact"));
+				user.setUserId(result.getString("user_id"));
+				user.setUserName(result.getString("user_name"));
+				user.setUserRole(result.getString("user_role"));
+				user.setUserEmail(result.getString("user_email"));
+				user.setUserContact(result.getString("user_contact"));
 				return user;
 			}
 		});

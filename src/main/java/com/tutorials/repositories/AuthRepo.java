@@ -13,7 +13,7 @@ public class AuthRepo {
 	private DataSource dataSource;
 
 	public boolean validateCredentials(String userId, String password) {
-		String query = "select active from auth where userId = :userId and password = :password";
+		String query = "select active from auth where user_id = :userId and password = :password";
 		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 		SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("userId", userId).addValue("password",
 				password);
